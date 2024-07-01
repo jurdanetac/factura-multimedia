@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <!-- Cabeceras de estándar necesarias -->
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>Factura - CamiCandy</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Librería para la estética del formulario -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+
+    <!-- Ícono de página -->
+    <link
+      rel="shortcut icon"
+      href="https://raw.githubusercontent.com/jurdanetac/ingsoftware-juan/main/static/favicon.ico"
+      type="image/x-icon"
+    />
+
+    <!-- Tipografía -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- CSS -->
+    <style>
+      body {
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 1em;
+        font-family: "EB Garamond", sans-serif;
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+      }
+
+      @page {
+        size: 8.5in 11in;
+      }
+
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        display: none;
+      }
+
+      table {
+        table-layout: fixed;
+        width: 100%;
+      }
+
+      tr {
+        max-width: 100%;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      h2 {
+        font-size: 1rem;
+      }
+
+      h1,
+      h2 {
+        margin: 0;
+        text-align: center;
+        vertical-align: middle;
+      }
+
+      header {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      #contenedor-logo {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      #logo {
+        width: 100px;
+        height: auto;
+      }
+
+      #rif {
+        font-size: 0.5rem;
+      }
+
+      #contacto {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .items thead {
+        text-align: left;
+      }
+
+      .center-align {
+        text-align: center;
+      }
+
+      .bill-details td {
+        font-size: 12px;
+      }
+
+      .receipt {
+        font-size: medium;
+      }
+
+      td input {
+        width: 100%;
+        border: none;
+      }
+
+      .items .heading {
+        font-size: 0.5em;
+        text-transform: uppercase;
+        border-top: 1px solid black;
+        margin-bottom: 4px;
+        border-bottom: 1px solid black;
+        vertical-align: middle;
+      }
+
+      .items thead tr th:first-child,
+      .items tbody tr td:first-child {
+        width: 47%;
+        min-width: 47%;
+        max-width: 47%;
+        word-break: break-all;
+        text-align: left;
+      }
+
+      .items td {
+        font-size: 18px;
+        text-align: right;
+        vertical-align: bottom;
+      }
+
+      .sum-up {
+        text-align: right !important;
+      }
+      .total {
+        font-size: 13px;
+        border-top: 1px dashed black !important;
+        border-bottom: 1px dashed black !important;
+      }
+      .total.text,
+      .total.price {
+        text-align: right;
+      }
+      .total.price::before {
+        content: "Bs. ";
+      }
+      .line {
+        border-top: 1px solid black !important;
+      }
+      .heading.rate {
+        width: 20%;
+      }
+      .heading.amount {
+        width: 20%;
+      }
+      .heading.qty {
+        width: 10%;
+      }
+      p {
+        padding: 1px;
+        margin: 0;
+      }
+      section,
+      footer {
+        font-size: 14pt;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Cabecera -->
+    <header>
+      <div id="contenedor-logo">
+        <img
+          id="logo"
+          src="https://raw.githubusercontent.com/jurdanetac/ingsoftware-juan/main/static/imagenes/icons/logo.png"
+          alt="CamiCandy Logo"
+        />
+        <p id="rif"><b>J-12345678-9</b></p>
+      </div>
+      <p id="contacto">
+        <span>Av. 28 La Limpia, C.C. Galerías Mall,</span>
+        <span> Nivel PB, Local N-123,</span>
+        <span> Maracaibo 4005 - Edo. Zulia</span>
+        <span>E-mail: <a href="#">contacto@camicandy.com</a></span>
+        <span> Teléfono: +58-261-7864528</span>
+      </p>
+    </header>
+    <section>
+      <h1><b>FACTURA FISCAL</b></h1>
+      <h2><em>SERIE "A"</em></h2>
+    </section>
+
+    <!-- Formulario de datos de cliente -->
+    <form onsubmit="window.print()">
+      <div class="form-group">
+        <label for="fecha">Fecha de Emisión</label>
+        <input type="date" class="form-control" id="fecha" required />
+      </div>
+      <div class="form-group">
+        <label for="nombre">Nombre o Razón Social</label>
+        <input type="text" class="form-control" id="nombre" required />
+      </div>
+      <div class="form-group">
+        <label for="id">Número de Identificación</label>
+        <div class="input-group">
+          <span class="input-group-btn">
+            <select class="form-control" name="args">
+              <option>V</option>
+              <option>E</option>
+              <option>J</option>
+              <option>G</option>
+            </select>
+          </span>
+          <span class="input-group-btn">
+            <input
+              type="number"
+              class="form-control"
+              id="id"
+              onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+              name="itemConsumption"
+              required
+            />
+          </span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="direccion">Dirección</label>
+        <input type="text" class="form-control" id="direccion" required />
+      </div>
+      <div class="form-group">
+        <label for="telefono">Teléfono</label>
+        <input
+          type="tel"
+          class="form-control"
+          id="telefono"
+          pattern="[0-9]{11}"
+          required
+        />
+        <small id="telefonoHelp" class="form-text text-muted"
+          >Formato: 04261234567</small
+        >
+      </div>
+      <div class="form-group">
+        <label for="correo">Correo Electrónico</label>
+        <input
+          type="email"
+          class="form-control"
+          id="correo"
+          pattern="^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$"
+          size="30"
+          required
+        />
+        <small id="correoHelp" class="form-text text-muted"
+          >No compartiremos tu correo electrónico con terceros.</small
+        >
+      </div>
+      <div>
+        <label>Método de Pago</label>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="exampleRadios"
+            id="exampleRadios1"
+            value="option1"
+            required
+          />
+          <label class="form-check-label" for="exampleRadios1"> Contado </label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="exampleRadios"
+            id="exampleRadios2"
+            value="option2"
+            required
+          />
+          <label class="form-check-label" for="exampleRadios2"> Crédito </label>
+        </div>
+      </div>
+
+      <!-- Tabla de recibo -->
+      <table class="items">
+        <!-- Cabecera de recibo -->
+        <thead>
+          <tr>
+            <th class="heading name">Ítem</th>
+            <th class="heading qty">Cantidad</th>
+            <th class="heading rate">Precio</th>
+            <th class="heading amount">Total</th>
+          </tr>
+        </thead>
+
+        <!-- Cuerpo de recibo -->
+        <tbody>
+          <tr>
+            <td><input type="text" required /></td>
+            <td>
+              <input
+                type="number"
+                class="cantidad"
+                onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                required
+              />
+            </td>
+            <td class="price">
+              <input
+                type="number"
+                class="unitario"
+                onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                required
+              />
+            </td>
+            <td class="price">
+              <input
+                class="monto"
+                type="number"
+                onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                readonly
+              />
+            </td>
+          </tr>
+          <tr>
+            <td><input type="text" required /></td>
+            <td>
+              <input
+                type="number"
+                class="cantidad"
+                onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                required
+              />
+            </td>
+            <td class="price">
+              <input
+                type="number"
+                class="unitario"
+                onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                required
+              />
+            </td>
+            <td class="price">
+              <input
+                class="monto"
+                type="number"
+                onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                readonly
+              />
+            </td>
+          </tr>
+          <tr>
+            <td><input type="text" required /></td>
+            <td>
+              <input
+                type="number"
+                class="cantidad"
+                onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                required
+              />
+            </td>
+            <td class="price">
+              <input
+                type="number"
+                class="unitario"
+                onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                required
+              />
+            </td>
+            <td class="price">
+              <input
+                class="monto"
+                type="number"
+                onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                readonly
+              />
+            </td>
+          </tr>
+          <tr>
+            <td><input type="text" required /></td>
+            <td>
+              <input
+                type="number"
+                class="cantidad"
+                onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                required
+              />
+            </td>
+            <td class="price">
+              <input
+                type="number"
+                class="unitario"
+                onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                required
+              />
+            </td>
+            <td class="price">
+              <input
+                class="monto"
+                type="number"
+                onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                readonly
+              />
+            </td>
+          </tr>
+          <!-- Montos -->
+          <tr>
+            <td colspan="3" class="sum-up line">Subtotal</td>
+            <td class="line price" id="subtotal">0</td>
+          </tr>
+          <tr>
+            <td colspan="3" class="sum-up">IVA (16%)</td>
+            <td class="price" id="iva">0</td>
+          </tr>
+          <tr>
+            <td colspan="3" class="sum-up">IGTF (3%)</td>
+            <td class="price" id="igtf">0</td>
+          </tr>
+          <tr>
+            <th colspan="3" class="total text">Total</th>
+            <th class="total price" id="global">0</th>
+          </tr>
+        </tbody>
+      </table>
+      <button type="submit" class="btn btn-success">Imprimir</button>
+    </form>
+
+    <!-- Pie de página -->
+    <footer style="text-align: center">
+      <p style="text-align: center">Gracias por su visita!</p>
+      <p>CamiCandy, C.A.</p>
+      <p>J-12345678-9</p>
+    </footer>
+  </body>
+  <!-- Un poco de JS necesario para poder calcular los montos -->
+  <script defer>
+    document.addEventListener("DOMContentLoaded", () => {
+      const global = document.getElementById("global");
+      const subtotal = document.getElementById("subtotal");
+      const iva = document.getElementById("iva");
+      const igtf = document.getElementById("igtf");
+
+      const montos = document.getElementsByClassName("monto");
+      const precios = document.getElementsByClassName("unitario");
+      const cantidades = document.getElementsByClassName("cantidad");
+
+      for (let i = 0; i < montos.length; i++) {
+        precios[i].addEventListener("input", () => {
+          montos[i].value = precios[i].value * cantidades[i].value;
+
+          let total = 0;
+          for (monto of montos) {
+            total += Number(monto.value);
+          }
+          subtotal.innerText = Math.round(100 * total) / 100;
+          iva.innerText = Math.round(100 * (total * 0.16)) / 100;
+          igtf.innerText = Math.round(100 * (total * 0.03)) / 100;
+          global.innerText =
+            Math.round(
+              100 *
+                (Number(iva.innerText) +
+                  Number(igtf.innerText) +
+                  Number(subtotal.innerText)),
+            ) / 100;
+        });
+        cantidades[i].addEventListener("input", () => {
+          montos[i].value = precios[i].value * cantidades[i].value;
+
+          let total = 0;
+          for (monto of montos) {
+            total += Number(monto.value);
+          }
+          subtotal.innerText = Math.round(100 * total) / 100;
+          iva.innerText = Math.round(100 * (total * 0.16)) / 100;
+          igtf.innerText = Math.round(100 * (total * 0.03)) / 100;
+          global.innerText =
+            Math.round(
+              100 *
+                (Number(iva.innerText) +
+                  Number(igtf.innerText) +
+                  Number(subtotal.innerText)),
+            ) / 100;
+        });
+      }
+    });
+  </script>
+</html>
